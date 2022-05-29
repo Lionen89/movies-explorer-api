@@ -13,7 +13,6 @@
     "eslint-plugin-import": "^2.26.0",
     "nodemon": "^2.0.15"
   },
-  "description": "[![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml) # Проект Mesto фронтенд + бэкенд",
   "main": "app.js",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -33,12 +32,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lionen89/express-mesto-gha.git"
+    "url": "git+https://github.com/Lionen89/movies-explorer-api.git"
   },
   "author": "Ilya Trubitsin",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Lionen89/express-mesto-gha/issues"
+    "url": "https://github.com/Lionen89/movies-explorer-api.git/issues"
   },
-  "homepage": "https://github.com/Lionen89/express-mesto-gha#readme"
+  "homepage": "https://github.com/Lionen89/movies-explorer-api.git#readme"
 }
