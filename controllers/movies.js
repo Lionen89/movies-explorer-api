@@ -57,9 +57,6 @@ module.exports.createMovie = (req, res, next) => {
 };
 module.exports.deleteMovie = (req, res, next) => {
   const { movieId } = req.params;
-  if (movieId.length !== 24) {
-    next(new BadRequestError('Неверно указан _id карточки.'));
-  }
   const ownerId = req.user._id;
   Movie.findById({ _id: movieId })
     .then((movie) => {
@@ -69,7 +66,7 @@ module.exports.deleteMovie = (req, res, next) => {
       if (movie.owner.toHexString() !== ownerId) {
         return next(new ForbiddenError('Вы не можете удалить не свой фильм.'));
       }
-      return Movie.findOneAndRemove({ _id: movieId })
+      return movie.remove()
         .then(() => {
           res.send(movie);
         });

@@ -3,13 +3,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const helmet = require('helmet');
 const { limiter } = require('./middlewares/limiter');
 const NotFoundError = require('./errors/not-found-err');
-const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./middlewares/errorHandler');
@@ -26,7 +24,8 @@ app.use(bodyParser.urlencoded({
   extended: true,
 }));
 
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
+mongoose.connect(process.env.NODE_ENV === 'production' ? 'mongodb://51.250.89.10:27017/moviesdb'
+  : 'mongodb://localhost:27017/moviesdb', {
   useNewUrlParser: true,
 }, (err) => {
   if (err) throw err;
@@ -38,25 +37,15 @@ app.use(cors());
 app.use(helmet());
 app.use(limiter);
 
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().required(),
-  }),
-}), createUser);
+app.use(require('./routes/auth'));
 
-app.use('/users', auth, require('./routes/users'));
+app.use(auth);
 
-app.use('/movies', auth, require('./routes/movies'));
+app.use(require('./routes/users'));
 
-app.use('*', auth, () => {
+app.use(require('./routes/movies'));
+
+app.use('*', () => {
   throw new NotFoundError('Страницы по данному адресу не существует');
 });
 

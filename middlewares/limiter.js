@@ -6,4 +6,4 @@ const limiter = rateLimit({
 });
 module.exports = {
   limiter,
-}
+};

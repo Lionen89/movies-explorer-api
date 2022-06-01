@@ -5,7 +5,6 @@ const ConflictError = require('../errors/conflict-err');
 const BadRequestError = require('../errors/bad-request-err');
 const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-err');
-require('dotenv').config();
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -22,15 +21,12 @@ module.exports.getCurrentUser = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const {
-    name, about, avatar, email, password,
+    name, email, password,
   } = req.body;
-  if (!email || !password) {
-    throw new Error('Пароль или email не переданы');
-  }
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(password, 10)
     .then((hash) => {
       User.create({
-        name, about, avatar, email, password: hash,
+        name, email, password: hash,
       })
         .then((user) => {
           const newUser = user.toObject();
@@ -67,6 +63,9 @@ module.exports.updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные.'));
+      }
+      if (err.code === 11000) {
+        next(new ConflictError('Такой пользователь уже существует.'));
       } else {
         next(new Error('Произошла ошибка.'));
       }

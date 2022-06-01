@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/unauthorized-err');
-require('dotenv').config();
 
 const handleAuthError = () => {
   throw new UnauthorizedError('Необходима авторизация');
@@ -17,7 +16,6 @@ module.exports = (req, res, next) => {
   }
 
   const token = extractBearerToken(authorization);
-  // const token2 = req.cookies.jwt;
 
   if (token === undefined) {
     return handleAuthError(res);
