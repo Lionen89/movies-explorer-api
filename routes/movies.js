@@ -1,7 +1,6 @@
 const router = require('express').Router(); // создали роутер
 const { celebrate, Joi } = require('celebrate');
-// const validator = require('validator');
-const { regularExpression } = require('../constants');
+const validator = require('validator');
 const {
   getMovies, createMovie, deleteMovie,
 } = require('../controllers/movies'); // импортировали контроллеры
@@ -15,17 +14,26 @@ router.post('/movies/', celebrate({
     year: Joi.string().required(),
     description: Joi.string().required(),
     image: Joi.string().required()
-      .regex(
-        regularExpression,
-      ),
+      .custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message('Поле image заполнено некорректно');
+      }),
     trailerLink: Joi.string().required()
-      .regex(
-        regularExpression,
-      ),
+      .custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message('Поле image заполнено некорректно');
+      }),
     thumbnail: Joi.string().required()
-      .regex(
-        regularExpression,
-      ),
+      .custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message('Поле image заполнено некорректно');
+      }),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
