@@ -28,8 +28,8 @@ module.exports.createMovie = (req, res, next) => {
   const owner = req.user._id;
   Movie.findOne({ movieId })
     .then((movie) => {
-      if (movie !== null) {
-        return next(new ForbiddenError('Данный фильм уже в базе данных'));
+      if (movie !== null && owner === movie.owner) {
+        next(new ForbiddenError('Данный фильм уже в базе данных'));
       }
       return Movie.create({
         country,
